@@ -12,6 +12,12 @@ from modules.analyzer import init_client, analyze_single, compare_scripts
 from modules.data    import load_and_aggregate, get_available_adset_codes, get_metrics_for_code, metrics_summary_text
 from modules.drive   import get_drive_service, list_scripts_in_folder, extract_text_from_drive_file
 
+# ── Session state defaults ────────────────────────────────────────────────────
+# Persists drive_svc, df_metrics, drive_scripts across Streamlit reruns
+for _k, _v in [("drive_svc", None), ("df_metrics", None), ("drive_scripts", {}), ("creds_dict", None)]:
+    if _k not in st.session_state:
+        st.session_state[_k] = _v
+
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Script Analyzer — StoryAnalyzer",
@@ -430,21 +436,21 @@ with col_main:
     """, unsafe_allow_html=True)
 
     # ── Load scripts from Drive ───────────────────────────────────────────────
-    drive_scripts = {}
-    df_metrics    = None
+    drive_scripts = st.session_state.drive_scripts
+    df_metrics    = st.session_state.df_metrics
     warnings_list = []
 
     if json_file and excel_file and folder_id:
         # Load Excel
         try:
-            df_metrics, warnings_list = load_and_aggregate(excel_file)
+            st.session_state.df_metrics, warnings_list = load_and_aggregate(excel_file)
             st.markdown(f"""
             <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);
                         border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              <span style="font-size:12px;color:#34d399;">Excel loaded — {len(df_metrics)} adsets found</span>
+              <span style="font-size:12px;color:#34d399;">Excel loaded — {len(st.session_state.df_metrics)} adsets found</span>
             </div>
             """, unsafe_allow_html=True)
         except Exception as e:
@@ -452,16 +458,16 @@ with col_main:
 
         # Connect Drive
         try:
-            creds_dict   = json.load(json_file)
-            drive_svc    = get_drive_service(creds_dict)
-            drive_scripts= list_scripts_in_folder(drive_svc, folder_id.strip())
+            st.session_state.creds_dict   = json.load(json_file)
+            st.session_state.drive_svc    = get_drive_service(st.session_state.creds_dict)
+            st.session_state.drive_scripts= list_scripts_in_folder(st.session_state.drive_svc, folder_id.strip())
             st.markdown(f"""
             <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);
                         border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              <span style="font-size:12px;color:#34d399;">Drive connected — {len(drive_scripts)} scripts found</span>
+              <span style="font-size:12px;color:#34d399;">Drive connected — {len(st.session_state.drive_scripts)} scripts found</span>
             </div>
             """, unsafe_allow_html=True)
         except Exception as e:
@@ -489,7 +495,7 @@ with col_main:
       </div>
     """, unsafe_allow_html=True)
 
-    script_options = list(drive_scripts.keys()) if drive_scripts else []
+    script_options = list(st.session_state.drive_scripts.keys()) if st.session_state.drive_scripts else []
     selected_scripts = st.multiselect(
         "",
         options=script_options,
@@ -547,7 +553,10 @@ with col_main:
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ── Analyse button ────────────────────────────────────────────────────────
-    can_run = bool(json_file and excel_file and folder_id and selected_scripts and api_key and df_metrics is not None and drive_scripts)
+    can_run = bool(json_file and excel_file and folder_id and selected_scripts and api_key
+                   and st.session_state.df_metrics is not None
+                   and st.session_state.drive_scripts
+                   and st.session_state.drive_svc is not None)
 
     if not can_run:
         missing = []
@@ -596,10 +605,10 @@ with col_main:
 
             for i, script_name in enumerate(selected_scripts):
                 progress.progress(int((i / len(selected_scripts)) * 80))
-                file_id     = drive_scripts[script_name]
-                script_text = extract_text_from_drive_file(drive_svc, file_id)
+                file_id     = st.session_state.drive_scripts[script_name]
+                script_text = extract_text_from_drive_file(st.session_state.drive_svc, file_id)
                 code        = script_name
-                metrics_d   = get_metrics_for_code(df_metrics, code) if df_metrics is not None else {}
+                metrics_d   = get_metrics_for_code(st.session_state.df_metrics, code) if st.session_state.df_metrics is not None else {}
                 metrics_txt = metrics_summary_text(metrics_d) if metrics_d else "No metrics found for this adset."
                 metrics_map[code] = metrics_txt
 
