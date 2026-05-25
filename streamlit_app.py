@@ -285,14 +285,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <!-- CTA -->
     <div class="flex items-center gap-3 flex-shrink-0">
-      <a href="/Help" target="_top"
+      <a href="/Help" target="_blank"
          class="text-xs text-muted hover:text-gold transition-colors duration-200 flex items-center gap-1.5">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
         </svg>
         Help
       </a>
-      <a href="/Tool" target="_top"
+      <a href="/Tool" target="_blank"
          class="text-xs font-semibold bg-violet hover:bg-violet-light text-white px-5 py-2 rounded-full transition-all duration-300 hover:scale-105">
         Analyze
       </a>
@@ -351,7 +351,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
           <!-- CTAs -->
           <div class="flex flex-wrap gap-4" id="hero-ctas">
-            <a href="/Tool" target="_top"
+            <a href="/Tool" target="_blank"
                class="inline-flex items-center gap-2 bg-gold hover:bg-gold-light text-void font-semibold px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105">
               Analyze a Script
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1181,7 +1181,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
-        <a href="/Tool" target="_top"
+        <a href="/Tool" target="_blank"
            class="inline-flex items-center justify-center gap-2.5 bg-gold hover:bg-gold-light text-void font-bold px-10 py-4 rounded-full text-base transition-all duration-300 hover:scale-105">
           Analyze a Script
           <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
