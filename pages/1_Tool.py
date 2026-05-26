@@ -259,7 +259,6 @@ with col_steps:
     st.markdown("""
     <div style="padding:24px 16px 24px 32px; position:sticky; top:140px;">
       <p style="font-size:10px; color:#5A5478; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:20px;">Workflow</p>
-
       <div style="display:flex; flex-direction:column; gap:0;">
         <div style="display:flex; align-items:flex-start; gap:12px; padding-bottom:20px;">
           <div style="display:flex; flex-direction:column; align-items:center;">
