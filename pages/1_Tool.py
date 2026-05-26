@@ -13,7 +13,6 @@ from modules.data    import load_and_aggregate, get_available_adset_codes, get_m
 from modules.drive   import get_drive_service, list_scripts_in_folder, extract_text_from_drive_file
 
 # ── Session state defaults ────────────────────────────────────────────────────
-# Persists drive_svc, df_metrics, drive_scripts across Streamlit reruns
 for _k, _v in [("drive_svc", None), ("df_metrics", None), ("drive_scripts", {}), ("creds_dict", None)]:
     if _k not in st.session_state:
         st.session_state[_k] = _v
@@ -45,14 +44,14 @@ h1,h2,h3 { font-family: 'DM Serif Display', serif !important; color: #EDE9F8 !im
 
 /* ── File uploader ── */
 [data-testid="stFileUploaderDropzone"] {
-  background: rgba(19,16,38,0.6) !important;
-  border: 1.5px dashed rgba(201,151,58,0.3) !important;
-  border-radius: 14px !important; padding: 28px 16px !important;
+  background: rgba(19,16,38,0.4) !important;
+  border: 1.5px dashed rgba(201,151,58,0.25) !important;
+  border-radius: 12px !important; padding: 24px 16px !important;
   transition: all 0.3s !important;
 }
 [data-testid="stFileUploaderDropzone"]:hover {
   border-color: rgba(201,151,58,0.6) !important;
-  background: rgba(19,16,38,0.9) !important;
+  background: rgba(19,16,38,0.7) !important;
   box-shadow: 0 0 30px rgba(201,151,58,0.1) !important;
 }
 [data-testid="stFileUploaderDropzoneInstructions"] p { color: #5A5478 !important; font-size: 13px !important; }
@@ -134,6 +133,9 @@ h1,h2,h3 { font-family: 'DM Serif Display', serif !important; color: #EDE9F8 !im
   50%  { transform: rotateY(-140deg); opacity: 0.6; }
   100% { transform: rotateY(-180deg); opacity: 0; }
 }
+
+/* ── Step block spacing ── */
+.sa-step-block { margin-bottom: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -340,25 +342,28 @@ with col_main:
     st.markdown('<div style="padding:24px 32px 24px 0;">', unsafe_allow_html=True)
 
     # ── STEP 1: JSON Key ──────────────────────────────────────────────────────
+    # Self-contained step header — complete opening AND closing div in one markdown call
     st.markdown("""
-    <div style="background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);border-radius:16px;
-                padding:24px 24px 20px;margin-bottom:20px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(201,151,58,0.1);
-                      border:1px solid rgba(201,151,58,0.2);display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-          </div>
-          <div>
-            <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Service Account JSON Key</p>
-            <p style="font-size:11px;color:#5A5478;margin:0;">Required for Google Drive script fetching</p>
-          </div>
+    <div class="sa-step-block">
+      <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 16px;
+                  background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);
+                  border-radius:16px 16px 0 0;margin-bottom:0;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(201,151,58,0.1);
+                    border:1px solid rgba(201,151,58,0.2);display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Service Account JSON Key</p>
+          <p style="font-size:11px;color:#5A5478;margin:0;">Required for Google Drive script fetching</p>
         </div>
         <span style="font-size:10px;color:#5A5478;background:rgba(29,26,53,0.6);
                      border:1px solid rgba(29,26,53,0.8);border-radius:4px;padding:3px 8px;">Step 1</span>
       </div>
+      <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
+                  border-radius:0 0 16px 16px;padding:16px 24px 20px;">
+    </div>
     """, unsafe_allow_html=True)
     json_file = st.file_uploader("", type=["json"], key="json_upload",
                                   help="Download from Google Cloud Console → IAM → Service Accounts → Keys")
@@ -366,73 +371,78 @@ with col_main:
 
     # ── STEP 2: Excel Upload ──────────────────────────────────────────────────
     st.markdown("""
-    <div style="background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);border-radius:16px;
-                padding:24px 24px 20px;margin-bottom:20px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.08);
-                      border:1px solid rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <polyline points="10 9 9 9 8 9"/>
-            </svg>
-          </div>
-          <div>
-            <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Retention &amp; Performance Data</p>
-            <p style="font-size:11px;color:#5A5478;margin:0;">Master tracker Excel — all campaign metrics</p>
-          </div>
+    <div class="sa-step-block">
+      <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 16px;
+                  background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);
+                  border-radius:16px 16px 0 0;margin-bottom:0;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.08);
+                    border:1px solid rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Retention &amp; Performance Data</p>
+          <p style="font-size:11px;color:#5A5478;margin:0;">Master tracker Excel — all campaign metrics</p>
         </div>
         <span style="font-size:10px;color:#5A5478;background:rgba(29,26,53,0.6);
                      border:1px solid rgba(29,26,53,0.8);border-radius:4px;padding:3px 8px;">Step 2</span>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
-        <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
-                     border-radius:100px;padding:3px 10px;color:#34d399;">Adset Code</span>
-        <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
-                     border-radius:100px;padding:3px 10px;color:#34d399;">ThruPlay %</span>
-        <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
-                     border-radius:100px;padding:3px 10px;color:#34d399;">CTR</span>
-        <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
-                     border-radius:100px;padding:3px 10px;color:#34d399;">CPI</span>
-        <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
-                     border-radius:100px;padding:3px 10px;color:#34d399;">Retention Buckets</span>
+      <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
+                  border-radius:0 0 16px 16px;padding:12px 24px 6px;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+          <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
+                       border-radius:100px;padding:3px 10px;color:#34d399;">Adset Code</span>
+          <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
+                       border-radius:100px;padding:3px 10px;color:#34d399;">ThruPlay %</span>
+          <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
+                       border-radius:100px;padding:3px 10px;color:#34d399;">CTR</span>
+          <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
+                       border-radius:100px;padding:3px 10px;color:#34d399;">CPI</span>
+          <span style="font-size:11px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);
+                       border-radius:100px;padding:3px 10px;color:#34d399;">Retention Buckets</span>
+        </div>
       </div>
+    </div>
     """, unsafe_allow_html=True)
     excel_file = st.file_uploader("", type=["xlsx", "xls"], key="excel_upload",
                                    help="The master tracker Excel with all Meta Ads performance data")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
 
     # ── STEP 3: Drive Folder ID ───────────────────────────────────────────────
     st.markdown("""
-    <div style="background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);border-radius:16px;
-                padding:24px;margin-bottom:20px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(59,130,246,0.08);
-                      border:1px solid rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2">
-              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-            </svg>
-          </div>
-          <div>
-            <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Google Drive Folder ID</p>
-            <p style="font-size:11px;color:#5A5478;margin:0;">The folder containing your .docx script files</p>
-          </div>
+    <div class="sa-step-block">
+      <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 16px;
+                  background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);
+                  border-radius:16px 16px 0 0;margin-bottom:0;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(59,130,246,0.08);
+                    border:1px solid rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Google Drive Folder ID</p>
+          <p style="font-size:11px;color:#5A5478;margin:0;">The folder containing your .docx script files</p>
         </div>
         <span style="font-size:10px;color:#5A5478;background:rgba(29,26,53,0.6);
                      border:1px solid rgba(29,26,53,0.8);border-radius:4px;padding:3px 8px;">Step 3</span>
       </div>
+      <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
+                  border-radius:0 0 16px 16px;padding:16px 24px 8px;">
+    </div>
     """, unsafe_allow_html=True)
     folder_id = st.text_input("", placeholder="e.g. 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs",
                                key="folder_id", help="From your Drive URL: drive.google.com/drive/folders/[FOLDER_ID]")
     st.markdown("""
-      <p style="font-size:11px;color:#5A5478;margin:6px 0 0;">
-        Open the folder in Drive → copy the ID from the URL after <code style="color:#C9973A;background:rgba(201,151,58,0.08);padding:1px 6px;border-radius:4px;">/folders/</code>
-      </p>
-    </div>
+    <p style="font-size:11px;color:#5A5478;margin:4px 0 0;padding:0 2px;">
+      Open the folder in Drive → copy the ID from the URL after <code style="color:#C9973A;background:rgba(201,151,58,0.08);padding:1px 6px;border-radius:4px;">/folders/</code>
+    </p>
+    <div style="height:16px;"></div>
     """, unsafe_allow_html=True)
 
     # ── Load scripts from Drive ───────────────────────────────────────────────
@@ -475,24 +485,26 @@ with col_main:
 
     # ── STEP 4: Select Scripts ────────────────────────────────────────────────
     st.markdown("""
-    <div style="background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);border-radius:16px;
-                padding:24px;margin-bottom:20px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(168,85,247,0.08);
-                      border:1px solid rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2">
-              <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-            </svg>
-          </div>
-          <div>
-            <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Select Scripts to Compare</p>
-            <p style="font-size:11px;color:#5A5478;margin:0;">Pick 1–4 scripts from your Drive folder</p>
-          </div>
+    <div class="sa-step-block">
+      <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 16px;
+                  background:rgba(19,16,38,0.5);border:1px solid rgba(29,26,53,0.8);
+                  border-radius:16px 16px 0 0;margin-bottom:0;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(168,85,247,0.08);
+                    border:1px solid rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">Select Scripts to Compare</p>
+          <p style="font-size:11px;color:#5A5478;margin:0;">Pick 1–4 scripts from your Drive folder</p>
         </div>
         <span style="font-size:10px;color:#5A5478;background:rgba(29,26,53,0.6);
                      border:1px solid rgba(29,26,53,0.8);border-radius:4px;padding:3px 8px;">Step 4</span>
       </div>
+      <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
+                  border-radius:0 0 16px 16px;padding:16px 24px 8px;">
+    </div>
     """, unsafe_allow_html=True)
 
     script_options = list(st.session_state.drive_scripts.keys()) if st.session_state.drive_scripts else []
@@ -504,28 +516,30 @@ with col_main:
         key="scripts_select",
         help="Select up to 4 scripts to compare side-by-side"
     )
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
 
     # ── STEP 5: AI + Analyse ─────────────────────────────────────────────────
     st.markdown("""
-    <div style="background:rgba(19,16,38,0.5);border:1px solid rgba(124,58,237,0.2);border-radius:16px;
-                padding:24px;margin-bottom:24px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(124,58,237,0.12);
-                      border:1px solid rgba(124,58,237,0.25);display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-          </div>
-          <div>
-            <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">AI Provider &amp; Analysis</p>
-            <p style="font-size:11px;color:#5A5478;margin:0;">Choose your AI model and run the analysis</p>
-          </div>
+    <div class="sa-step-block">
+      <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 16px;
+                  background:rgba(19,16,38,0.5);border:1px solid rgba(124,58,237,0.2);
+                  border-radius:16px 16px 0 0;margin-bottom:0;">
+        <div style="width:32px;height:32px;border-radius:8px;background:rgba(124,58,237,0.12);
+                    border:1px solid rgba(124,58,237,0.25);display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <p style="font-size:14px;font-weight:600;color:#EDE9F8;margin:0;">AI Provider &amp; Analysis</p>
+          <p style="font-size:11px;color:#5A5478;margin:0;">Choose your AI model and run the analysis</p>
         </div>
         <span style="font-size:10px;color:#A855F7;background:rgba(124,58,237,0.08);
                      border:1px solid rgba(124,58,237,0.2);border-radius:4px;padding:3px 8px;">Step 5</span>
       </div>
+      <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(124,58,237,0.15);border-top:none;
+                  border-radius:0 0 16px 16px;padding:16px 24px 8px;">
+    </div>
     """, unsafe_allow_html=True)
 
     ai_provider = st.radio(
@@ -550,7 +564,7 @@ with col_main:
         }.get(ai_provider, ""),
         key="api_key"
     )
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div style="height:8px;"></div>', unsafe_allow_html=True)
 
     # ── Analyse button ────────────────────────────────────────────────────────
     can_run = bool(json_file and excel_file and folder_id and selected_scripts and api_key
@@ -667,29 +681,29 @@ with col_main:
                 overall = r.get("overall_score", 0)
                 verdict = r.get("verdict", "")
 
-                # Overall score hero
+                # Overall score hero — complete self-contained block
                 color = "#34d399" if overall >= 70 else ("#fbbf24" if overall >= 50 else "#f87171")
                 st.markdown(f"""
-                <div style="display:flex;align-items:center;gap:24px;padding:20px;
-                            background:rgba(19,16,38,0.6);border:1px solid rgba(29,26,53,0.8);
+                <div style="padding:20px;background:rgba(19,16,38,0.6);border:1px solid rgba(29,26,53,0.8);
                             border-radius:14px;margin-bottom:20px;">
-                  <div style="text-align:center;flex-shrink:0;">
-                    <div style="width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-                                background:conic-gradient({color} {overall*3.6}deg, rgba(29,26,53,0.8) 0deg);
-                                box-shadow:0 0 30px {color}33;">
-                      <div style="width:64px;height:64px;border-radius:50%;background:#0D0B1E;
-                                  display:flex;align-items:center;justify-content:center;">
-                        <span style="font-size:22px;font-weight:800;color:{color};">{overall}</span>
+                  <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+                    <div style="text-align:center;flex-shrink:0;">
+                      <div style="width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+                                  background:conic-gradient({color} {overall*3.6}deg, rgba(29,26,53,0.8) 0deg);
+                                  box-shadow:0 0 30px {color}33;">
+                        <div style="width:64px;height:64px;border-radius:50%;background:#0D0B1E;
+                                    display:flex;align-items:center;justify-content:center;">
+                          <span style="font-size:22px;font-weight:800;color:{color};">{overall}</span>
+                        </div>
                       </div>
+                      <p style="font-size:10px;color:#5A5478;margin:6px 0 0;text-transform:uppercase;">Overall</p>
                     </div>
-                    <p style="font-size:10px;color:#5A5478;margin:6px 0 0;text-transform:uppercase;">Overall</p>
-                  </div>
-                  <div>
-                    <p style="font-size:18px;font-family:'DM Serif Display',serif;color:#EDE9F8;margin:0 0 8px;">{verdict}</p>
-                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <div style="flex:1;min-width:180px;">
+                      <p style="font-size:18px;font-family:'DM Serif Display',serif;color:#EDE9F8;margin:0 0 12px;">{verdict}</p>
+                      <div style="display:flex;flex-wrap:wrap;gap:8px;">
                 """, unsafe_allow_html=True)
 
-                # Score pills
+                # Score pills — each is a complete self-contained block
                 dims = [
                     ("hook_score",          "Hook",     "#C9973A"),
                     ("pacing_score",        "Pacing",   "#A855F7"),
@@ -706,7 +720,7 @@ with col_main:
                     </div>
                     """, unsafe_allow_html=True)
 
-                st.markdown('</div></div></div>', unsafe_allow_html=True)
+                st.markdown('</div></div></div></div>', unsafe_allow_html=True)
 
                 # Dimension findings
                 for dim_key, dim_label, dim_color, icon in [
