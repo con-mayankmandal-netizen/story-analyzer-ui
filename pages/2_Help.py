@@ -95,7 +95,7 @@ st.markdown("""
                 text-shadow:0 0 10px rgba(229,192,104,0.45);">Mayank Mandal</a>
     </div>
   </div>
-  <nav style="display:flex;align-items:center;justify-content:space-between;padding:10px 40px;
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 40px;
               border-bottom:1px solid rgba(29,26,53,0.4);">
     <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
       <div style="display:flex;align-items:flex-end;gap:2px;height:20px;">
@@ -120,16 +120,14 @@ st.markdown("""
          onmouseover="this.style.background='#A855F7';this.style.transform='scale(1.05)'"
          onmouseout="this.style.background='#7C3AED';this.style.transform='scale(1)'">GitHub</a>
     </div>
-  </nav>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ── Hero with floating particles + film strip ─────────────────────────────────
 st.markdown("""
-<section style="position:relative;overflow:hidden;padding:60px 40px 48px;text-align:center;
-                background:linear-gradient(180deg,rgba(124,58,237,0.05) 0%,transparent 100%);">
-
-  <!-- Floating ambient orbs (pure CSS, self-contained) -->
+<div style="position:relative;overflow:hidden;padding:60px 40px 48px;text-align:center;
+            background:linear-gradient(180deg,rgba(124,58,237,0.05) 0%,transparent 100%);">
   <div class="particle-orb" style="width:300px;height:300px;top:5%;left:-4%;
        background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,transparent 70%);
        --dur:8s;--delay:0s;"></div>
@@ -139,10 +137,7 @@ st.markdown("""
   <div class="particle-orb" style="width:180px;height:180px;bottom:10%;left:28%;
        background:radial-gradient(circle,rgba(168,85,247,0.08) 0%,transparent 70%);
        --dur:7s;--delay:1s;"></div>
-
   <div style="position:relative;max-width:700px;margin:0 auto;">
-
-    <!-- Film strip decoration -->
     <div class="fade-1" style="display:flex;justify-content:center;margin-bottom:24px;">
       <div class="film-strip">
         <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
@@ -150,27 +145,22 @@ st.markdown("""
         <div class="film-hole"></div><div class="film-hole"></div>
       </div>
     </div>
-
-    <!-- Badge -->
     <div class="fade-1" style="display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;
          background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);
          border-radius:100px;padding:5px 16px;">
-      <span style="font-size:12px;color:#A855F7;">🎬 Help &amp; Contact</span>
+      <span style="font-size:12px;color:#A855F7;">&#127916; Help &amp; Contact</span>
     </div>
-
-    <!-- Heading -->
     <h1 class="fade-2" style="font-family:'DM Serif Display',serif;
         font-size:clamp(2.2rem,5vw,4rem);line-height:1.12;color:#EDE9F8;margin:0 0 16px;">
       Got a question?<br>
-      <span style="color:#C9973A;font-style:italic;">I'm here to help.</span>
+      <span style="color:#C9973A;font-style:italic;">I&#39;m here to help.</span>
     </h1>
-
     <p class="fade-3" style="font-size:15px;color:#5A5478;max-width:500px;margin:0 auto;line-height:1.7;">
       StoryAnalyzer is built and maintained by a single developer at PocketFM.
-      Reach out anytime — whether it's a bug, a feature idea, or just a question about how it works.
+      Reach out anytime &#8212; whether it&#39;s a bug, a feature idea, or just a question about how it works.
     </p>
   </div>
-</section>
+</div>
 """, unsafe_allow_html=True)
 
 # ── Developer card — self-contained, correct opening + closing tags ───────────
@@ -178,14 +168,9 @@ st.markdown("""
 <div style="max-width:820px;margin:0 auto;padding:0 40px 48px;">
   <div class="glass fade-4" style="border-radius:20px;overflow:hidden;
        box-shadow:0 0 60px rgba(124,58,237,0.12),0 0 120px rgba(201,151,58,0.06);">
-
-    <!-- Top accent bar -->
     <div style="height:3px;background:linear-gradient(90deg,#7C3AED,#C9973A,#A855F7);"></div>
-
     <div style="padding:36px 40px;">
       <div style="display:flex;align-items:flex-start;gap:28px;margin-bottom:28px;flex-wrap:wrap;">
-
-        <!-- Avatar with ring pulse -->
         <div style="flex-shrink:0;">
           <div style="width:96px;height:96px;border-radius:16px;
                       display:flex;align-items:center;justify-content:center;position:relative;
@@ -193,7 +178,6 @@ st.markdown("""
                       border:1.5px solid rgba(201,151,58,0.3);
                       animation:ringPulse 3s ease-in-out infinite;">
             <span style="font-family:'DM Serif Display',serif;font-size:36px;color:#E5C068;line-height:1;">MM</span>
-            <!-- Online indicator -->
             <div style="position:absolute;bottom:-4px;right:-4px;width:18px;height:18px;
                         border-radius:50%;background:#22c55e;border:2px solid #06040F;
                         display:flex;align-items:center;justify-content:center;">
@@ -201,15 +185,13 @@ st.markdown("""
             </div>
           </div>
         </div>
-
-        <!-- Name + role + tags -->
         <div style="flex:1;min-width:200px;">
           <p style="font-size:10px;color:rgba(90,84,120,0.6);text-transform:uppercase;
                     letter-spacing:0.12em;margin:0 0 4px;">Developer &amp; Maintainer</p>
           <h2 class="name-shimmer" style="font-family:'DM Serif Display',serif;
               font-size:clamp(1.6rem,3vw,2.2rem);margin:0 0 4px;">Mayank Mandal</h2>
           <p style="font-size:13px;color:#5A5478;margin:0 0 16px;">
-            PocketFM · Creative &amp; Performance Marketing Tech
+            PocketFM &middot; Creative &amp; Performance Marketing Tech
           </p>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
             <span style="font-size:11px;padding:3px 12px;border-radius:100px;
@@ -225,14 +207,8 @@ st.markdown("""
           </div>
         </div>
       </div>
-
-      <!-- Horizontal divider -->
       <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(29,26,53,1),transparent);margin-bottom:0;"></div>
-
-      <!-- Three contact cards as a grid — fully self-contained -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;min-height:160px;">
-
-        <!-- Email -->
         <a href="mailto:con-mayank.mandal@pocketfm.com"
            style="text-decoration:none;padding:24px;
                   border-right:1px solid rgba(29,26,53,0.6);
@@ -267,7 +243,6 @@ st.markdown("""
           </div>
         </a>
 
-        <!-- Slack -->
         <a href="https://pocket-fm.slack.com/team/U08NHRDM9M2" target="_blank" rel="noopener"
            style="text-decoration:none;padding:24px;
                   border-right:1px solid rgba(29,26,53,0.6);
@@ -298,7 +273,6 @@ st.markdown("""
           </div>
         </a>
 
-        <!-- GitHub -->
         <a href="https://github.com/con-mayankmandal-netizen/story-analyzer-ui" target="_blank" rel="noopener"
            style="text-decoration:none;padding:24px;
                   display:flex;flex-direction:column;gap:12px;
@@ -369,10 +343,8 @@ for q, a in faqs:
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""
-<footer style="border-top:1px solid rgba(29,26,53,0.8);background:rgba(6,4,15,0.95);
-               padding:36px 40px;text-align:center;">
-
-  <!-- Film strip bottom decoration -->
+<div style="border-top:1px solid rgba(29,26,53,0.8);background:rgba(6,4,15,0.95);
+            padding:36px 40px;text-align:center;">
   <div style="display:flex;justify-content:center;margin-bottom:20px;">
     <div class="film-strip">
       <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
@@ -412,5 +384,5 @@ st.markdown("""
   <p style="font-size:10px;color:rgba(90,84,120,0.4);margin:12px 0 0;">
     PocketFM Script Intelligence &bull; Open Source &bull; 2025
   </p>
-</footer>
+</div>
 """, unsafe_allow_html=True)

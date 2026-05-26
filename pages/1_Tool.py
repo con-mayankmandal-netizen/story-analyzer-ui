@@ -145,8 +145,6 @@ st.markdown("""
 <div style="position:sticky; top:0; z-index:999; background:rgba(6,4,15,0.95);
             backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
             border-bottom:1px solid rgba(29,26,53,0.8);">
-
-  <!-- Tagline strip -->
   <div style="padding:6px 32px; border-bottom:1px solid rgba(29,26,53,0.5);
               display:flex; align-items:center; justify-content:space-between;">
     <p style="font-size:11px; color:rgba(90,84,120,0.7); font-family:'Outfit',sans-serif; margin:0;">
@@ -163,9 +161,7 @@ st.markdown("""
                 text-shadow:0 0 10px rgba(229,192,104,0.45);">Mayank Mandal</a>
     </div>
   </div>
-
-  <!-- Nav -->
-  <nav style="display:flex; align-items:center; justify-content:space-between; padding:10px 32px;">
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 32px;">
     <a href="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
       <div style="display:flex; align-items:flex-end; gap:2px; height:20px;">
         <div class="wave-bar" style="height:6px;  --dur:1.0s;"></div>
@@ -188,10 +184,9 @@ st.markdown("""
          style="font-size:12px; font-weight:600; background:#7C3AED; color:#fff; text-decoration:none;
                 padding:7px 18px; border-radius:100px;">GitHub</a>
     </div>
-  </nav>
+  </div>
 </div>
 
-<!-- Quote banner -->
 <div style="background:linear-gradient(90deg,rgba(124,58,237,0.08),rgba(6,4,15,0),rgba(201,151,58,0.06));
             border-bottom:1px solid rgba(29,26,53,0.4); padding:10px 32px;
             display:flex; align-items:center; gap:12px;">
@@ -266,7 +261,6 @@ with col_steps:
       <p style="font-size:10px; color:#5A5478; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:20px;">Workflow</p>
 
       <div style="display:flex; flex-direction:column; gap:0;">
-        <!-- Step 1 -->
         <div style="display:flex; align-items:flex-start; gap:12px; padding-bottom:20px;">
           <div style="display:flex; flex-direction:column; align-items:center;">
             <div style="width:28px;height:28px;border-radius:50%;background:rgba(201,151,58,0.15);
@@ -280,7 +274,6 @@ with col_steps:
             <p style="font-size:11px;color:#5A5478;margin:2px 0 0;">Upload JSON key</p>
           </div>
         </div>
-        <!-- Step 2 -->
         <div style="display:flex; align-items:flex-start; gap:12px; padding-bottom:20px;">
           <div style="display:flex; flex-direction:column; align-items:center;">
             <div style="width:28px;height:28px;border-radius:50%;background:rgba(201,151,58,0.1);
@@ -294,7 +287,6 @@ with col_steps:
             <p style="font-size:11px;color:#5A5478;margin:2px 0 0;">Upload retention &amp; metrics Excel</p>
           </div>
         </div>
-        <!-- Step 3 -->
         <div style="display:flex; align-items:flex-start; gap:12px; padding-bottom:20px;">
           <div style="display:flex; flex-direction:column; align-items:center;">
             <div style="width:28px;height:28px;border-radius:50%;background:rgba(201,151,58,0.1);
@@ -308,7 +300,6 @@ with col_steps:
             <p style="font-size:11px;color:#5A5478;margin:2px 0 0;">Enter folder ID</p>
           </div>
         </div>
-        <!-- Step 4 -->
         <div style="display:flex; align-items:flex-start; gap:12px; padding-bottom:20px;">
           <div style="display:flex; flex-direction:column; align-items:center;">
             <div style="width:28px;height:28px;border-radius:50%;background:rgba(201,151,58,0.1);
@@ -322,7 +313,6 @@ with col_steps:
             <p style="font-size:11px;color:#5A5478;margin:2px 0 0;">Pick scripts to compare</p>
           </div>
         </div>
-        <!-- Step 5 -->
         <div style="display:flex; align-items:flex-start; gap:12px;">
           <div style="width:28px;height:28px;border-radius:50%;background:rgba(124,58,237,0.1);
                       border:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
