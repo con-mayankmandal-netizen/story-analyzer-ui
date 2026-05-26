@@ -339,7 +339,6 @@ with col_steps:
 
 # ─────────────────────────── MAIN CONTENT ────────────────────────────────────
 with col_main:
-    st.markdown('<div style="padding:24px 32px 24px 0;">', unsafe_allow_html=True)
 
     # ── STEP 1: JSON Key ──────────────────────────────────────────────────────
     # Self-contained step header — complete opening AND closing div in one markdown call
@@ -363,11 +362,11 @@ with col_main:
       </div>
       <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
                   border-radius:0 0 16px 16px;padding:16px 24px 20px;">
+      </div>
     </div>
     """, unsafe_allow_html=True)
     json_file = st.file_uploader("", type=["json"], key="json_upload",
                                   help="Download from Google Cloud Console → IAM → Service Accounts → Keys")
-    st.markdown('</div>', unsafe_allow_html=True)
 
     # ── STEP 2: Excel Upload ──────────────────────────────────────────────────
     st.markdown("""
@@ -434,6 +433,7 @@ with col_main:
       </div>
       <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
                   border-radius:0 0 16px 16px;padding:16px 24px 8px;">
+      </div>
     </div>
     """, unsafe_allow_html=True)
     folder_id = st.text_input("", placeholder="e.g. 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs",
@@ -504,6 +504,7 @@ with col_main:
       </div>
       <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(29,26,53,0.8);border-top:none;
                   border-radius:0 0 16px 16px;padding:16px 24px 8px;">
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -539,6 +540,7 @@ with col_main:
       </div>
       <div style="background:rgba(19,16,38,0.3);border:1px solid rgba(124,58,237,0.15);border-top:none;
                   border-radius:0 0 16px 16px;padding:16px 24px 8px;">
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -681,8 +683,22 @@ with col_main:
                 overall = r.get("overall_score", 0)
                 verdict = r.get("verdict", "")
 
-                # Overall score hero — complete self-contained block
+                # Overall score hero — build pills first, then render as one block
                 color = "#34d399" if overall >= 70 else ("#fbbf24" if overall >= 50 else "#f87171")
+                dims = [
+                    ("hook_score",          "Hook",     "#C9973A"),
+                    ("pacing_score",        "Pacing",   "#A855F7"),
+                    ("emotional_arc_score", "Emotion",  "#60a5fa"),
+                    ("cta_score",           "CTA",      "#34d399"),
+                ]
+                pills_html = ""
+                for key, label, col in dims:
+                    val = r.get(key, 0)
+                    pills_html += f"""<div style="background:rgba(19,16,38,0.8);border:1px solid rgba(29,26,53,0.9);
+                                border-radius:8px;padding:8px 14px;text-align:center;min-width:70px;">
+                      <p style="font-size:18px;font-weight:700;color:{col};margin:0;">{val}</p>
+                      <p style="font-size:10px;color:#5A5478;margin:2px 0 0;">{label}</p>
+                    </div>"""
                 st.markdown(f"""
                 <div style="padding:20px;background:rgba(19,16,38,0.6);border:1px solid rgba(29,26,53,0.8);
                             border-radius:14px;margin-bottom:20px;">
@@ -701,26 +717,12 @@ with col_main:
                     <div style="flex:1;min-width:180px;">
                       <p style="font-size:18px;font-family:'DM Serif Display',serif;color:#EDE9F8;margin:0 0 12px;">{verdict}</p>
                       <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                """, unsafe_allow_html=True)
-
-                # Score pills — each is a complete self-contained block
-                dims = [
-                    ("hook_score",          "Hook",     "#C9973A"),
-                    ("pacing_score",        "Pacing",   "#A855F7"),
-                    ("emotional_arc_score", "Emotion",  "#60a5fa"),
-                    ("cta_score",           "CTA",      "#34d399"),
-                ]
-                for key, label, col in dims:
-                    val = r.get(key, 0)
-                    st.markdown(f"""
-                    <div style="background:rgba(19,16,38,0.8);border:1px solid rgba(29,26,53,0.9);
-                                border-radius:8px;padding:8px 14px;text-align:center;min-width:70px;">
-                      <p style="font-size:18px;font-weight:700;color:{col};margin:0;">{val}</p>
-                      <p style="font-size:10px;color:#5A5478;margin:2px 0 0;">{label}</p>
+                        {pills_html}
+                      </div>
                     </div>
-                    """, unsafe_allow_html=True)
-
-                st.markdown('</div></div></div></div>', unsafe_allow_html=True)
+                  </div>
+                </div>
+                """, unsafe_allow_html=True)
 
                 # Dimension findings
                 for dim_key, dim_label, dim_color, icon in [
@@ -816,8 +818,6 @@ with col_main:
                   <p style="font-size:14px;color:#EDE9F8;line-height:1.7;margin:0;">{next_test}</p>
                 </div>
                 """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""

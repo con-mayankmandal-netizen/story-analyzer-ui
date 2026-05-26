@@ -363,12 +363,9 @@ faqs = [
      "Your JSON key and scripts are processed <strong style='color:#C9973A;'>locally in your Streamlit session</strong> — nothing is stored on any external server. Scripts are only sent to the AI provider you choose (Gemini/Groq/Claude) for analysis, as per their API privacy policies."),
 ]
 
-with st.container():
-    st.markdown('<div style="max-width:820px;margin:0 auto;padding:0 40px 60px;">', unsafe_allow_html=True)
-    for q, a in faqs:
-        with st.expander(q):
-            st.markdown(f'<p style="font-size:14px;color:#EDE9F8;line-height:1.75;margin:0;">{a}</p>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+for q, a in faqs:
+    with st.expander(q):
+        st.markdown(f'<p style="font-size:14px;color:#EDE9F8;line-height:1.75;margin:0;">{a}</p>', unsafe_allow_html=True)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""
